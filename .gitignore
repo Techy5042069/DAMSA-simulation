@@ -1,0 +1,25 @@
+# Build files
+build/
+*.o
+*.a
+*.so
+
+# GEANT4 output files
+*.wrl
+*.heprep
+*.prim
+*.mac~
+
+# Executables
+damsa_sim
+damsa_energy_scan
+
+# Editor files
+*~
+*.swp
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
