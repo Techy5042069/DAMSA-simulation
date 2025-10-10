@@ -23,23 +23,23 @@ make
 
 ##Details of detector geometry
 
-Tungsten Target: 5×5×10 cm³ solid block, positioned at Z = -80 cm
-Vacuum Chamber: Cylindrical, radius 10 cm, length 30 cm, centered at Z = -60 cm
-Vacuum Chamber Wall: 5 mm stainless steel (specified, not yet implemented)
-Silicon Tracker: 6 layers, each 12×12×0.2 cm³, positioned from Z = -40 cm to -30 cm with 2 cm spacing
-CsI Calorimeter: 12×12×44 cm³, centered at Z = -6 cm
+-Tungsten Target: 5×5×10 cm³ solid block, positioned at Z = -80 cm
+- Vacuum Chamber: Cylindrical, radius 10 cm, length 30 cm, centered at Z = -60 cm
+- Vacuum Chamber Wall: 5 mm stainless steel (specified, not yet implemented)
+- Silicon Tracker: 6 layers, each 12×12×0.2 cm³, positioned from Z = -40 cm to -30 cm with 2 cm spacing
+- CsI Calorimeter: 12×12×44 cm³, centered at Z = -6 cm
 
 ## Beam Parameters
 
-Particle Type: Electrons
-Beam Energy: 8 GeV
-Beam Profile: Pinpoint (no transverse spread)
-Starting Position: Z = -90 cm
+-Particle Type: Electrons
+- Beam Energy: 8 GeV
+- Beam Profile: Pinpoint (no transverse spread)
+- Starting Position: Z = -90 cm
 
 ## Output
 Simulation generates VRML files for visualization showing:
 
-Detector geometry
+## Detector geometry
 Particle trajectories color-coded by type (electrons: red, photons: green, positrons: cyan, neutrons: yellow)
 
 
