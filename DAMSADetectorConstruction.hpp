@@ -38,6 +38,7 @@ private:                                  // helper function that sets up materi
 
     //CsI calorimeter
     G4LogicalVolume* fCsICalLV;         // storing different pointers to materials that we will be using
+    G4LogicalVolume* fScoringVolumeLV;
 
     //Magnetic Field
     G4UniformMagField* fMagField;

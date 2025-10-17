@@ -1,6 +1,8 @@
 #include "DAMSADetectorConstruction.hpp"
 #include "DAMSAPrimaryGeneratorAction.hpp"
 #include "DAMSASensitiveDetector.hpp"
+#include "DAMSASteppingAction.hpp"
+#include "DAMSAAnalysis.hpp"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
@@ -23,6 +25,7 @@ int main()
     // Set user action classes
     DAMSAPrimaryGeneratorAction* primaryGenerator = new DAMSAPrimaryGeneratorAction();
     runManager->SetUserAction(primaryGenerator);
+    runManager->SetUserAction(new DAMSASteppingAction());
     
     // Initialize G4 kernel
     runManager->Initialize();
@@ -46,7 +49,10 @@ int main()
         // Run events
         G4String command = "/run/beamOn " + std::to_string(eventsPerEnergy);
         G4UImanager::GetUIpointer()->ApplyCommand(command);
-        
+        DAMSAAnalysis::Instance()->PrintSummary();
+        DAMSAAnalysis::Instance()->Reset();       
+
+
         G4cout << "Completed " << eventsPerEnergy << " events at " 
                << energies[i]/MeV << " MeV" << G4endl;
     }

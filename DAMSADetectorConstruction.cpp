@@ -3,7 +3,7 @@
 #include "G4NistManager.hh"               // material list
 #include "G4Box.hh"                       // box shapes
 #include "G4Tubs.hh"
-#include "G4LogicalVolume.hh"
+#include "G4LogicalVolume.hh"            //store pointers to scoring volume logical volume 
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
@@ -23,8 +23,7 @@
 
 DAMSADetectorConstruction::DAMSADetectorConstruction()
 : G4VUserDetectorConstruction(),                           // : starts an initialization list. setting all pointers to nullptr
-  fTungstenTargetLV(nullptr), fDecayChamberLV(nullptr), fCsICalLV(nullptr),
-  fTungsten(nullptr), fVacuum(nullptr), fSilicon(nullptr), fCsI(nullptr), fAir(nullptr), fMagField(nullptr), fFieldMgr(nullptr)
+  fTungstenTargetLV(nullptr), fDecayChamberLV(nullptr), fCsICalLV(nullptr), fScoringVolumeLV(nullptr), fTungsten(nullptr), fVacuum(nullptr), fSilicon(nullptr), fCsI(nullptr), fAir(nullptr), fMagField(nullptr), fFieldMgr(nullptr)
 {
     for(int i=0; i<6; i++) fSiTrackerLV[i] = nullptr;
     DefineMaterials();                                    // call our material setup function. must be called before geometry
@@ -86,6 +85,22 @@ G4VPhysicalVolume* DAMSADetectorConstruction::Construct()   // Construct() most 
     G4SubtractionSolid* csiSolid = new G4SubtractionSolid("CsICalorimeter", csiBox, csiHole);
     fCsICalLV = new G4LogicalVolume(csiSolid, fCsI, "CsICalorimeter");
     new G4PVPlacement(0, G4ThreeVector(0, 0, -6*cm), fCsICalLV, "CsICalorimeter", logicWorld, false, 0);
+
+    //Scoring volume at detector entrance(invisible, counts particles)
+    G4Box* scoringBox = new G4Box("ScoringBox", 15*cm, 15*cm, 0.1*mm);    //area bgger than detector to catch all particles, thickness b=very thin as we just need to detect crossing
+    fScoringVolumeLV = new G4LogicalVolume(scoringBox, fVacuum, "ScoringVolume");  //combine shape+vacuum material
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -28*cm), fScoringVolumeLV, "ScoringVolume", logicWorld, false, 0);  //place scoring volume at Z=-28 cm(detector entrance), last silicon layer(-30 cm), CsI front(-28 cm), scoring volume right at detector front
+
+   
+    G4VisAttributes* invisibleVis = new G4VisAttributes();  //making scoring volume invisible, just a counter
+    invisibleVis->SetVisibility(false);
+    fScoringVolumeLV->SetVisAttributes(invisibleVis);
+
+    // Target exit scoring volume (Z = -75cm, right after target)    //same but at target exit
+    G4Box* targetExitBox = new G4Box("TargetExitBox", 15*cm, 15*cm, 0.1*mm);
+    G4LogicalVolume* targetExitLV = new G4LogicalVolume(targetExitBox, fVacuum, "TargetExitVolume");
+    new G4PVPlacement(0, G4ThreeVector(0, 0, -75*cm), targetExitLV, "TargetExitVolume", logicWorld, false, 0);
+    targetExitLV->SetVisAttributes(invisibleVis);
     
     // Add colors for visualization
     G4VisAttributes* tungstenVis = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7)); // (red, green, blue) 0 is dark, 1 is bright

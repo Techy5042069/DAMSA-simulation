@@ -4,6 +4,8 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "QBBC.hh"
+#include "DAMSASteppingAction.hpp"
+#include "DAMSAAnalysis.hpp"
 
 int main()
 {
@@ -16,6 +18,7 @@ int main()
     runManager->SetUserInitialization(physicsList);
 
     runManager->SetUserAction(new DAMSAPrimaryGeneratorAction());// asking manager to use our beam design
+    runManager->SetUserAction(new DAMSASteppingAction());   //telling GEANT4 to use our stepping action
 
     G4VisExecutive* visManager = new G4VisExecutive; 
     visManager->Initialize();                   // builds everything, constructs geometry, initializes physics, sets up tracking
@@ -51,6 +54,9 @@ int main()
     G4cout << "- Green tracks: Photons (Bremsstrahlung)" << G4endl;
     G4cout << "- Yellow tracks: Neutrons (background)" << G4endl;
     G4cout << "- Cyan tracks: Positrons" << G4endl;
+
+   //Print particle counting results
+    DAMSAAnalysis:: Instance()->PrintSummary();     // after all events finish, print accumulated counts
     
     delete visManager;
     delete runManager;
