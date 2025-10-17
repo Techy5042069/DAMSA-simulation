@@ -21,18 +21,22 @@ make
 ## Execute the main simulation 
 ./damsa_sim
 
-##Details of detector geometry
+## Details of detector geometry
 
 -Tungsten Target: 5×5×10 cm³ solid block, positioned at Z = -80 cm
 - Vacuum Chamber: Cylindrical, radius 10 cm, length 30 cm, centered at Z = -60 cm
 - Vacuum Chamber Wall: 5 mm stainless steel (specified, not yet implemented)
 - Silicon Tracker: 6 layers, each 12×12×0.2 cm³, positioned from Z = -40 cm to -30 cm with 2 cm spacing
 - CsI Calorimeter: 12×12×44 cm³, centered at Z = -6 cm
+- Scoring Volume (invisible):
+	*Target Exit: 30×30×0.2 mm³ at Z = -75 cm (counts particles exiting target)
+	*Detector Entrance: 30×30×0.2 mm³ at Z = -28 cm (counts particles reaching detector)
 
 ## Beam Parameters
 
 -Particle Type: Electrons
 - Beam Energy: 8 GeV
+- Position: Starts at Z
 - Beam Profile: Pinpoint (no transverse spread)
 - Starting Position: Z = -90 cm
 
