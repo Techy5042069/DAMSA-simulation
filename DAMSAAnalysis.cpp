@@ -31,7 +31,7 @@ void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy
         else if(particleName == "gamma") fTargetExitPhotons++;
         else if(particleName == "e-") fTargetExitElectrons++;
         else if(particleName == "e+") fTargetExitPositrons++;
-        fTargetExitEnergy += energy;  #add energy to total
+        fTargetExitEnergy += energy;  //add energy to total
   }
     else if(location == "DetectorEntrance") {               //same logic for detector entrance counters
         if(particleName == "neutron") fDetectorNeutrons++;
