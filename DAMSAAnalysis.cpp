@@ -2,17 +2,17 @@
 #include "G4SystemOfUnits.hh"
 #include <iostream>
 
-DAMSAAnalysis* DAMSAAnalysis::fInstance = nullptr;  \\initialize the singleton pointer to null
+DAMSAAnalysis* DAMSAAnalysis::fInstance = nullptr;  //initialize the singleton pointer to null
 
-DAMSAAnalysis* DAMSAAnalysis::Instance()  \\gets the singleton instance
+DAMSAAnalysis* DAMSAAnalysis::Instance()  //gets the singleton instance
 {
-    if(!fInstance) {                          \\ checks if instance exists
-        fInstance = new DAMSAAnalysis();      \\if it doesn't it creates new DAMSAAnalysis
+    if(!fInstance) {                          // checks if instance exists
+        fInstance = new DAMSAAnalysis();      //if it doesn't it creates new DAMSAAnalysis
     }
-    return fInstance;                         \\returns pointer to instance
+    return fInstance;                         //returns pointer to instance
 }
 
-DAMSAAnalysis::DAMSAAnalysis()               \\constructor-initializes all counters to zero
+DAMSAAnalysis::DAMSAAnalysis()               //constructor-initializes all counters to zero
 : fTargetExitNeutrons(0), fTargetExitPhotons(0),
   fTargetExitElectrons(0), fTargetExitPositrons(0),
   fTargetExitEnergy(0),
@@ -24,16 +24,16 @@ DAMSAAnalysis::DAMSAAnalysis()               \\constructor-initializes all count
 DAMSAAnalysis::~DAMSAAnalysis()
 {}
 
-void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy, const G4String& location) #records particle at target exit
+void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy, const G4String& location) //records particle at target exit
 {
     if(location == "TargetExit") {
-        if(particleName == "neutron") fTargetExitNeutrons++;   \\check particle type, increment appropriate counter
+        if(particleName == "neutron") fTargetExitNeutrons++;   //check particle type, increment appropriate counter
         else if(particleName == "gamma") fTargetExitPhotons++;
         else if(particleName == "e-") fTargetExitElectrons++;
         else if(particleName == "e+") fTargetExitPositrons++;
         fTargetExitEnergy += energy;  #add energy to total
   }
-    else if(location == "DetectorEntrance") {               \\same logic for detector entrance counters
+    else if(location == "DetectorEntrance") {               //same logic for detector entrance counters
         if(particleName == "neutron") fDetectorNeutrons++;
         else if(particleName == "gamma") fDetectorPhotons++;
         else if(particleName == "e-") fDetectorElectrons++;
