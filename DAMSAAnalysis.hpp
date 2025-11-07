@@ -9,7 +9,7 @@ class DAMSAAnalysis
 public:
     static DAMSAAnalysis* Instance();  // singleton pattern-only one analysis object for entire simulation so that all events write to same notebook
     
-    void RecordParticle(const G4String& particleName, G4double energy, const G4String& location);  //function to record particle, particlename tells type of particle, energy gives kinetic energy, location gives target exit or detector enetrance
+    void RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle);  //function to record particle, particlename tells type of particle, energy gives kinetic energy, location gives target exit or detector enetrance
     void PrintSummary();   //prints all accumulated counts at th eend
     void Reset();          // clears all counters back to zero, when running multiple energy scans, resets btwn each energy point
     
@@ -31,6 +31,10 @@ private:
     G4int fDetectorElectrons;
     G4int fDetectorPositrons;
     G4double fDetectorEnergy;
+    static const int kMaxPhotons = 10000; // maximum no of photons we can store
+    G4double fDetectorPhotonEnergies[kMaxPhotons];  // array to store energy of each photon
+    G4int fDetectorPhotonEnergyCount; //counter; used as array index
+    G4double fDetectorPhotonAngles[kMaxPhotons];  // Store angle for each photon
 };
 
 #endif

@@ -20,8 +20,12 @@ void DAMSASteppingAction::UserSteppingAction(const G4Step* step)  //get the volu
         G4Track* track = step->GetTrack();                                    //get particle type
         G4String particleName = track->GetDefinition()->GetParticleName();    //get name as string
         G4double energy = track->GetKineticEnergy();                          //get current kinetic energy
+
+        // Get momentum direction and calculate angle relative to beam axis
+        G4ThreeVector momentum = track->GetMomentumDirection();
+        G4double angle = momentum.angle(G4ThreeVector(0,0,1));  // angle in radians
         
-        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "DetectorEntrance");   //record particle in our analysis notebook
+        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "DetectorEntrance", angle);   //record particle in our analysis notebook
         
         track->SetTrackStatus(fStopAndKill);   //kills the track; stops simulating
     }
@@ -29,8 +33,11 @@ void DAMSASteppingAction::UserSteppingAction(const G4Step* step)  //get the volu
         G4Track* track = step->GetTrack();
         G4String particleName = track->GetDefinition()->GetParticleName();
         G4double energy = track->GetKineticEnergy();
+
+        G4ThreeVector momentum = track->GetMomentumDirection();
+        G4double angle = momentum.angle(G4ThreeVector(0,0,1));
         
-        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "TargetExit");
+        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "TargetExit", angle);
         
         // Don't kill track at the target exit - let it continue to detector
    }
