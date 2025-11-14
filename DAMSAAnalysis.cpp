@@ -25,6 +25,7 @@ DAMSAAnalysis::~DAMSAAnalysis()
 {}
 
 void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle) //records particle at target exit
+
 {
     if(location == "TargetExit") {
         if(particleName == "neutron") fTargetExitNeutrons++;   //check particle type, increment appropriate counter
