@@ -44,9 +44,9 @@ int main()
     UImanager->ApplyCommand("/vis/modeling/trajectories/drawByParticleID-0/set e+ cyan");
     UImanager->ApplyCommand("/vis/modeling/trajectories/drawByParticleID-0/set neutron yellow");
 
-    G4cout << "Running 5 events with track visualization..." << G4endl;
+    G4cout << "Running 100 events with track visualization..." << G4endl;
     UImanager->ApplyCommand("/tracking/storeTrajectory 2");
-    UImanager->ApplyCommand("/run/beamOn 5");
+    UImanager->ApplyCommand("/run/beamOn 100");
 
     UImanager->ApplyCommand("/vis/viewer/flush");
 
