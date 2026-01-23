@@ -23,7 +23,7 @@
 
 DAMSADetectorConstruction::DAMSADetectorConstruction()
 : G4VUserDetectorConstruction(),                           // : starts an initialization list. setting all pointers to nullptr
-  fTungstenTargetLV(nullptr), fDecayChamberLV(nullptr), fCsICalLV(nullptr), fScoringVolumeLV(nullptr), fTungsten(nullptr), fVacuum(nullptr), fSilicon(nullptr), fCsI(nullptr), fAir(nullptr), fMagField(nullptr), fFieldMgr(nullptr)
+  fTungstenTargetLV(nullptr), fDecayChamberLV(nullptr), fCsICalLV(nullptr), fScoringVolumeLV(nullptr), fTungsten(nullptr), fVacuum(nullptr), fSilicon(nullptr), fCsI(nullptr), fAir(nullptr), fMagField(nullptr), fFieldMgr(nullptr), fCsIPositionZ(-6*cm)
 {
     for(int i=0; i<6; i++) fSiTrackerLV[i] = nullptr;
     DefineMaterials();                                    // call our material setup function. must be called before geometry
@@ -84,7 +84,7 @@ G4VPhysicalVolume* DAMSADetectorConstruction::Construct()   // Construct() most 
     G4Box* csiHole = new G4Box("CsIHole", 1*cm, 1*cm, 22.1*cm);  // beam hole
     G4SubtractionSolid* csiSolid = new G4SubtractionSolid("CsICalorimeter", csiBox, csiHole);
     fCsICalLV = new G4LogicalVolume(csiSolid, fCsI, "CsICalorimeter");
-    new G4PVPlacement(0, G4ThreeVector(0, 0, -6*cm), fCsICalLV, "CsICalorimeter", logicWorld, false, 0);
+    new G4PVPlacement(0, G4ThreeVector(0, 0, fCsIPositionZ), fCsICalLV, "CsICalorimeter", logicWorld, false, 0);
 
     //Scoring volume at detector entrance(invisible, counts particles)
     G4Box* scoringBox = new G4Box("ScoringBox", 15*cm, 15*cm, 0.1*mm);    //area bgger than detector to catch all particles, thickness b=very thin as we just need to detect crossing

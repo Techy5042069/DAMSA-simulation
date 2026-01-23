@@ -295,3 +295,15 @@ void DAMSAAnalysis::Reset()
     fDetectorElectronCount = 0;
     fDetectorPositronCount = 0;
 }
+
+G4int DAMSAAnalysis::GetForwardPhotons() const
+{
+    G4int forwardCount = 0;
+    for(G4int i = 0; i < fDetectorPhotonEnergyCount; i++) {
+        G4double angleDeg = fDetectorPhotonAngles[i] * 180.0 / 3.14159265;
+        if(angleDeg < 20.0) {
+            forwardCount++;
+        }
+    }
+    return forwardCount;
+}

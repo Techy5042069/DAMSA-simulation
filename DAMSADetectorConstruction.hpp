@@ -24,7 +24,8 @@ public:                           // building on top of GEANT4's template
     virtual ~DAMSADetectorConstruction();  // destructor, runs when simulation ends. cleans up memeory
 
     virtual G4VPhysicalVolume* Construct();  // main funcion where we build our detector geometry
-    virtual void ConstructSDandField();      // second function where you add sensitive detectors (that records hits)
+    virtual void ConstructSDandField();      // second function where you add sensitive detectors (that record)
+    void SetCsIPositionZ(G4double z) { fCsIPositionZ = z; }
 
 private:                                  // helper function that sets up materials like tungsten, silicon, etc.
     //Target
@@ -39,6 +40,9 @@ private:                                  // helper function that sets up materi
     //CsI calorimeter
     G4LogicalVolume* fCsICalLV;         // storing different pointers to materials that we will be using
     G4LogicalVolume* fScoringVolumeLV;
+
+    //Variable CsI position
+    G4double fCsIPositionZ;
 
     //Magnetic Field
     G4UniformMagField* fMagField;

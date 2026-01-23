@@ -12,6 +12,11 @@ public:
     void RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle);
     void PrintSummary();
     void Reset();
+    G4int GetTargetExitPhotons() const { return fTargetExitPhotons; }
+    G4int GetTargetExitNeutrons() const { return fTargetExitNeutrons; }
+    G4int GetDetectorPhotons() const { return fDetectorPhotons; }
+    G4int GetDetectorNeutrons() const { return fDetectorNeutrons; }
+    G4int GetForwardPhotons() const;  // Count photons in 0-20 degrees
     
 private:
     DAMSAAnalysis();

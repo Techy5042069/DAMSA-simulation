@@ -28,10 +28,19 @@ set(headers
 # Add executable
 add_executable(damsa_sim damsa_sim.cpp DAMSADetectorConstruction.cpp DAMSAPrimaryGeneratorAction.cpp DAMSASensitiveDetector.cpp DAMSASteppingAction.cpp DAMSAAnalysis.cpp)
 add_executable(damsa_energy_scan damsa_energy_scan.cpp DAMSADetectorConstruction.cpp DAMSAPrimaryGeneratorAction.cpp DAMSASensitiveDetector.cpp DAMSASteppingAction.cpp DAMSAAnalysis.cpp)
+add_executable(damsa_gap_scan_auto
+    damsa_gap_scan_auto.cpp
+    DAMSADetectorConstruction.cpp
+    DAMSAPrimaryGeneratorAction.cpp
+    DAMSASensitiveDetector.cpp
+    DAMSASteppingAction.cpp
+    DAMSAAnalysis.cpp
+)
 
 # Link GEANT4 libraries
 target_link_libraries(damsa_sim ${Geant4_LIBRARIES})
 target_link_libraries(damsa_energy_scan ${Geant4_LIBRARIES})
+target_link_libraries(damsa_gap_scan_auto ${Geant4_LIBRARIES})
 
 # Copy scripts to build directory
 set(DAMSA_SCRIPTS
