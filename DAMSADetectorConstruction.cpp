@@ -23,7 +23,7 @@
 
 DAMSADetectorConstruction::DAMSADetectorConstruction()
 : G4VUserDetectorConstruction(),                           // : starts an initialization list. setting all pointers to nullptr
-  fTungstenTargetLV(nullptr), fDecayChamberLV(nullptr), fCsICalLV(nullptr), fScoringVolumeLV(nullptr), fTungsten(nullptr), fVacuum(nullptr), fSilicon(nullptr), fCsI(nullptr), fAir(nullptr), fMagField(nullptr), fFieldMgr(nullptr), fCsIPositionZ(-6*cm)
+  fTungstenTargetLV(nullptr), fDecayChamberLV(nullptr), fCsICalLV(nullptr), fScoringVolumeLV(nullptr), fTungsten(nullptr), fVacuum(nullptr), fSilicon(nullptr), fCsI(nullptr), fAir(nullptr), fMagField(nullptr), fFieldMgr(nullptr), fCsIPositionZ(-6*cm), fTargetX(5*cm), fTargetY(5*cm), fTargetZ(10*cm)
 {
     for(int i=0; i<6; i++) fSiTrackerLV[i] = nullptr;
     DefineMaterials();                                    // call our material setup function. must be called before geometry
@@ -34,9 +34,9 @@ DAMSADetectorConstruction::~DAMSADetectorConstruction()
     delete fMagField;    
 }
 
-void DAMSADetectorConstruction::DefineMaterials()         // Instance() gets the only one datatbase. Only one with one name
+void DAMSADetectorConstruction::DefineMaterials()         
 {
-    G4NistManager* nist = G4NistManager::Instance();
+    G4NistManager* nist = G4NistManager::Instance();	// Instance() gets the only one datatbase. Only one with one name
     
     // Define materials
     fTungsten = nist->FindOrBuildMaterial("G4_W");
@@ -101,6 +101,9 @@ G4VPhysicalVolume* DAMSADetectorConstruction::Construct()   // Construct() most 
     G4LogicalVolume* targetExitLV = new G4LogicalVolume(targetExitBox, fVacuum, "TargetExitVolume");
     new G4PVPlacement(0, G4ThreeVector(0, 0, -75*cm), targetExitLV, "TargetExitVolume", logicWorld, false, 0);
     targetExitLV->SetVisAttributes(invisibleVis);
+    
+    // Tungsten target 
+    G4Box* targetBox = new G4Box("TargetBox", fTargetX/2, fTargetY/2, fTargetZ/2);
     
     // Add colors for visualization
     G4VisAttributes* tungstenVis = new G4VisAttributes(G4Colour(0.7, 0.7, 0.7)); // (red, green, blue) 0 is dark, 1 is bright

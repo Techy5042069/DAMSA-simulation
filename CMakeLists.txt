@@ -4,32 +4,20 @@ project(DAMSA_Simulation)
 # Find GEANT4 package
 find_package(Geant4 REQUIRED ui_all vis_all)
 
+# Find ROOT package
+find_package(ROOT REQUIRED)
+
 # Include GEANT4 headers
 include(${Geant4_USE_FILE})
+
+# Include ROOT headers
+include_directories(${ROOT_INCLUDE_DIRS})
 
 # Include directories
 include_directories(${PROJECT_SOURCE_DIR})
 
-# Set sources
-set(sources
-    damsa_sim.cpp
-    damsa_energy_scan.cpp
-    DAMSADetectorConstruction.cpp
-    DAMSAPrimaryGeneratorAction.cpp
-    DAMSASensitiveDetector.cpp
-)
-
-set(headers
-    DAMSADetectorConstruction.hpp
-    DAMSAPrimaryGeneratorAction.hpp
-    DAMSASensitiveDetector.hpp
-)
-
-# Add executable
-add_executable(damsa_sim damsa_sim.cpp DAMSADetectorConstruction.cpp DAMSAPrimaryGeneratorAction.cpp DAMSASensitiveDetector.cpp DAMSASteppingAction.cpp DAMSAAnalysis.cpp)
-add_executable(damsa_energy_scan damsa_energy_scan.cpp DAMSADetectorConstruction.cpp DAMSAPrimaryGeneratorAction.cpp DAMSASensitiveDetector.cpp DAMSASteppingAction.cpp DAMSAAnalysis.cpp)
-add_executable(damsa_gap_scan_auto
-    damsa_gap_scan_auto.cpp
+# Common source files
+set(common_sources
     DAMSADetectorConstruction.cpp
     DAMSAPrimaryGeneratorAction.cpp
     DAMSASensitiveDetector.cpp
@@ -37,19 +25,30 @@ add_executable(damsa_gap_scan_auto
     DAMSAAnalysis.cpp
 )
 
-# Link GEANT4 libraries
-target_link_libraries(damsa_sim ${Geant4_LIBRARIES})
-target_link_libraries(damsa_energy_scan ${Geant4_LIBRARIES})
-target_link_libraries(damsa_gap_scan_auto ${Geant4_LIBRARIES})
-
-# Copy scripts to build directory
-set(DAMSA_SCRIPTS
+# Executable 1: Visualization
+add_executable(damsa_sim 
+    damsa_sim.cpp 
+    ${common_sources}
 )
+target_link_libraries(damsa_sim ${Geant4_LIBRARIES})
 
-foreach(_script ${DAMSA_SCRIPTS})
-    configure_file(
-        ${PROJECT_SOURCE_DIR}/${_script}
-        ${PROJECT_BINARY_DIR}/${_script}
-        COPYONLY
-    )
-endforeach()
+# Executable 2: Background Analysis (counts only)
+add_executable(damsa_background_analysis
+    damsa_background_analysis.cpp
+    ${common_sources}
+)
+target_link_libraries(damsa_background_analysis ${Geant4_LIBRARIES})
+
+# Executable 3: Energy & Angular Distributions (ROOT histograms)
+add_executable(damsa_energy_angular_distributions
+    damsa_energy_angular_distributions.cpp
+    ${common_sources}
+)
+target_link_libraries(damsa_energy_angular_distributions ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+
+# Legacy executables (if needed)
+add_executable(damsa_gap_scan
+    damsa_gap_scan.cpp
+    ${common_sources}
+)
+target_link_libraries(damsa_gap_scan ${Geant4_LIBRARIES})

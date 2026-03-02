@@ -7,58 +7,51 @@
 #include "DAMSASteppingAction.hpp"
 #include "DAMSAAnalysis.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
+    G4cout << "\n=============================================" << G4endl;
+    G4cout << "=== DAMSA Visualization Mode ===" << G4endl;
+    G4cout << "=== Generates VRML files for 3D viewing ===" << G4endl;
+    G4cout << "=============================================" << G4endl;
 
-    G4RunManager* runManager = new G4RunManager; // RunManager controls everything initialization, running events, cleanup
-    runManager->SetUserInitialization(new DAMSADetectorConstruction());  // new creates an instance of detector class
-
-    G4VModularPhysicsList* physicsList = new QBBC;  // QBBC is pre built list of physics processes Quark Based Bertini Cascade 
+    G4RunManager* runManager = new G4RunManager;  //RunManager = the boss that coordinates everything. Controls initialization, running events, cleanup
+    
+    runManager->SetUserInitialization(new DAMSADetectorConstruction());
+    
+    G4VModularPhysicsList* physicsList = new QBBC; //Quark-Based Bertini Cascade, pre-built list of physics processes
+//Includes: electromagnetic interactions, nuclear reactions, particle decays 
     physicsList->SetVerboseLevel(0);
     runManager->SetUserInitialization(physicsList);
-
-    runManager->SetUserAction(new DAMSAPrimaryGeneratorAction());// asking manager to use our beam design
-    runManager->SetUserAction(new DAMSASteppingAction());   //telling GEANT4 to use our stepping action
-
-    G4VisExecutive* visManager = new G4VisExecutive; 
-    visManager->Initialize();                   // builds everything, constructs geometry, initializes physics, sets up tracking
-
+    
+    runManager->SetUserAction(new DAMSAPrimaryGeneratorAction()); //Tells RunManager to use my particle beam design
+    runManager->SetUserAction(new DAMSASteppingAction());
+    
+    // Initialize visualization
+    G4VisManager* visManager = new G4VisExecutive;
+    visManager->Initialize();
+    
+    runManager->Initialize();  // construct geometry, initialize physics, set up tracking, must be initialized before running events
+    
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    runManager->Initialize();
-
-    G4cout <<  "DAMSA Track Visualization" << G4endl;
-    G4cout << "Primary Beam: 8 GeV protons" << G4endl;
-    G4cout << "Target: Tungsten" << G4endl;
-    G4cout << " Physics: electromagnetic + hadronic" << G4endl;
-    UImanager->ApplyCommand("/vis/open VRML2FILE");
-    UImanager->ApplyCommand("/vis/drawVolume");
-    UImanager->ApplyCommand("/vis/scene/create");
-    UImanager->ApplyCommand("/vis/scene/add/volume");
-    UImanager->ApplyCommand("/vis/scene/add/trajectories smooth");
-    UImanager->ApplyCommand("/vis/scene/add/hits");
-    UImanager->ApplyCommand("/vis/sceneHandler/attach");
-
-    UImanager->ApplyCommand("/vis/modeling/trajectories/create/drawByParticleID");
-    UImanager->ApplyCommand("/vis/modeling/trajectories/drawByParticleID-0/set e- red");
-    UImanager->ApplyCommand("/vis/modeling/trajectories/drawByParticleID-0/set gamma green");
-    UImanager->ApplyCommand("/vis/modeling/trajectories/drawByParticleID-0/set e+ cyan");
-    UImanager->ApplyCommand("/vis/modeling/trajectories/drawByParticleID-0/set neutron yellow");
-
-    G4cout << "Running 100 events with track visualization..." << G4endl;
-    UImanager->ApplyCommand("/tracking/storeTrajectory 2");
-    UImanager->ApplyCommand("/run/beamOn 100");
-
-    UImanager->ApplyCommand("/vis/viewer/flush");
-
-    G4cout << "- Red tracks: Electrons (primary + secondary)" << G4endl;
-    G4cout << "- Green tracks: Photons (Bremsstrahlung)" << G4endl;
-    G4cout << "- Yellow tracks: Neutrons (background)" << G4endl;
-    G4cout << "- Cyan tracks: Positrons" << G4endl;
-
-   //Print particle counting results
-    DAMSAAnalysis:: Instance()->PrintSummary();     // after all events finish, print accumulated counts
+    
+    // Run visualization macro
+    G4cout << "\nGenerating VRML visualization files..." << G4endl;
+    UImanager->ApplyCommand("/control/execute ../vis.mac");
+    
+    G4cout << "\n=============================================" << G4endl;
+    G4cout << "Visualization files generated:" << G4endl;
+    G4cout << "  g4_00.wrl - Detector geometry only" << G4endl;
+    G4cout << "  g4_01.wrl - Event 1 with particle tracks" << G4endl;
+    G4cout << "  g4_02.wrl - Event 2 with particle tracks" << G4endl;
+    G4cout << "  g4_03.wrl - Event 3 with particle tracks" << G4endl;
+    G4cout << "  g4_04.wrl - Event 4 with particle tracks" << G4endl;
+    G4cout << "  g4_05.wrl - Event 5 with particle tracks" << G4endl;
+    G4cout << "\nView files at: https://www.viewstl.com/" << G4endl;
+    G4cout << "Or use: view3dscene <filename>.wrl" << G4endl;
+    G4cout << "=============================================" << G4endl;
     
     delete visManager;
     delete runManager;
+    
     return 0;
 }

@@ -26,6 +26,12 @@ public:                           // building on top of GEANT4's template
     virtual G4VPhysicalVolume* Construct();  // main funcion where we build our detector geometry
     virtual void ConstructSDandField();      // second function where you add sensitive detectors (that record)
     void SetCsIPositionZ(G4double z) { fCsIPositionZ = z; }
+    
+    void SetTargetDimensions(G4double x, G4double y, G4double z) {
+        fTargetX = x;
+        fTargetY = y;
+        fTargetZ = z;
+    }
 
 private:                                  // helper function that sets up materials like tungsten, silicon, etc.
     //Target
@@ -54,6 +60,10 @@ private:                                  // helper function that sets up materi
     G4Material* fSilicon;
     G4Material* fCsI;
     G4Material* fAir;
+    
+    G4double fTargetX;
+    G4double fTargetY;
+    G4double fTargetZ;
 
     void DefineMaterials();
     void SetupMagneticField();

@@ -18,6 +18,21 @@ public:
     G4int GetDetectorNeutrons() const { return fDetectorNeutrons; }
     G4int GetForwardPhotons() const;  // Count photons in 0-20 degrees
     
+    // Energy and angle array access
+    G4int GetDetectorPhotonCount() const { return fDetectorPhotonEnergyCount; }
+    G4int GetDetectorNeutronCount() const { return fDetectorNeutronCount; }
+    G4int GetDetectorElectronCount() const { return fDetectorElectronCount; }
+    G4int GetDetectorPositronCount() const { return fDetectorPositronCount; }
+    
+    const G4double* GetDetectorPhotonEnergies() const { return fDetectorPhotonEnergies; }
+    const G4double* GetDetectorPhotonAngles() const { return fDetectorPhotonAngles; }
+    const G4double* GetDetectorNeutronEnergies() const { return fDetectorNeutronEnergies; }
+    const G4double* GetDetectorNeutronAngles() const { return fDetectorNeutronAngles; }
+    const G4double* GetDetectorElectronEnergies() const { return fDetectorElectronEnergies; }
+    const G4double* GetDetectorElectronAngles() const { return fDetectorElectronAngles; }
+    const G4double* GetDetectorPositronEnergies() const { return fDetectorPositronEnergies; }
+    const G4double* GetDetectorPositronAngles() const { return fDetectorPositronAngles; }
+    
 private:
     DAMSAAnalysis();
     ~DAMSAAnalysis();

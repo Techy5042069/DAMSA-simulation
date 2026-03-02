@@ -1,0 +1,44 @@
+# DAMSA Visualization Macro
+# Set verbosity
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+# Open VRML viewer
+/vis/open VRML2FILE
+
+# Create empty scene first
+/vis/scene/create
+
+# Add world volume to the scene
+/vis/scene/add/volume world
+
+# Attach scene to viewer
+/vis/sceneHandler/attach
+
+# Add axes
+/vis/scene/add/axes 0 0 0 10 cm
+
+# Set viewpoint
+/vis/viewer/set/viewpointVector 1 1 1
+/vis/viewer/set/upVector 0 0 1
+
+# Draw empty geometry first
+/vis/viewer/flush
+
+# Add trajectories to scene
+/vis/scene/add/trajectories smooth
+
+# Color coding
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set e- red
+/vis/modeling/trajectories/drawByParticleID-0/set gamma green
+/vis/modeling/trajectories/drawByParticleID-0/set e+ cyan
+/vis/modeling/trajectories/drawByParticleID-0/set neutron yellow
+
+# Accumulate events
+/vis/scene/endOfEventAction accumulate
+
+# Run events
+/run/beamOn 5
