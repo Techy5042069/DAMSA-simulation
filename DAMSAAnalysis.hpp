@@ -8,10 +8,11 @@ class DAMSAAnalysis
 {
 public:
     static DAMSAAnalysis* Instance();
-    
-    void RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle);
+    void RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle, G4double tof = 0.0);
     void PrintSummary();
+    void PrintTOFSummary() const;
     void Reset();
+
     G4int GetTargetExitPhotons() const { return fTargetExitPhotons; }
     G4int GetTargetExitNeutrons() const { return fTargetExitNeutrons; }
     G4int GetDetectorPhotons() const { return fDetectorPhotons; }
@@ -32,6 +33,9 @@ public:
     const G4double* GetDetectorElectronAngles() const { return fDetectorElectronAngles; }
     const G4double* GetDetectorPositronEnergies() const { return fDetectorPositronEnergies; }
     const G4double* GetDetectorPositronAngles() const { return fDetectorPositronAngles; }
+    
+    const G4double* GetDetectorPhotonTOF()  const { return fDetectorPhotonTOF; }
+    const G4double* GetDetectorNeutronTOF() const { return fDetectorNeutronTOF; }
     
 private:
     DAMSAAnalysis();
@@ -56,12 +60,14 @@ private:
     static const int kMaxPhotons = 10000;
     G4double fDetectorPhotonEnergies[kMaxPhotons];
     G4double fDetectorPhotonAngles[kMaxPhotons];
+    G4double fDetectorPhotonTOF [kMaxPhotons];  
     G4int fDetectorPhotonEnergyCount;
     
     // Neutron histogram storage
     static const int kMaxNeutrons = 1000;
     G4double fDetectorNeutronEnergies[kMaxNeutrons];
     G4double fDetectorNeutronAngles[kMaxNeutrons];
+    G4double fDetectorNeutronTOF [kMaxNeutrons];
     G4int fDetectorNeutronCount;
     
     // Electron histogram storage

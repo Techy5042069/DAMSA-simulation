@@ -33,12 +33,13 @@ void DAMSASteppingAction::UserSteppingAction(const G4Step* step)
     G4ThreeVector momentum = track->GetMomentumDirection();
     G4double angle = momentum.angle(G4ThreeVector(0,0,1));
     
+    G4double globalTime = step->GetPostStepPoint()->GetGlobalTime(); // Geant4 ns
     if(volName == "ScoringVolume") {
-        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "DetectorEntrance", angle);
+        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "DetectorEntrance", angle, globalTime);
         track->SetTrackStatus(fStopAndKill);
     }
     else if(volName == "TargetExitVolume") {
-        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "TargetExit", angle);
+        DAMSAAnalysis::Instance()->RecordParticle(particleName, energy, "TargetExit", angle, globalTime);
         // Don't kill track - let it continue to detector
     }
 }

@@ -1,6 +1,8 @@
 #include "DAMSAAnalysis.hpp"
 #include "G4SystemOfUnits.hh"
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 
 DAMSAAnalysis* DAMSAAnalysis::fInstance = nullptr;
 
@@ -23,12 +25,16 @@ DAMSAAnalysis::DAMSAAnalysis()
   fDetectorNeutronCount(0),
   fDetectorElectronCount(0),
   fDetectorPositronCount(0)
-{}
+{
+    // Zero-initialise TOF arrays so valgrind is happy even if never filled
+    for(int i = 0; i < kMaxPhotons;   i++) fDetectorPhotonTOF[i]  = 0.;
+    for(int i = 0; i < kMaxNeutrons;  i++) fDetectorNeutronTOF[i] = 0.;
+}
 
 DAMSAAnalysis::~DAMSAAnalysis()
 {}
 
-void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle)
+void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy, const G4String& location, G4double angle, G4double tof)
 {
     if(location == "TargetExit") {
         if(particleName == "neutron") fTargetExitNeutrons++;
@@ -43,6 +49,7 @@ void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy
             if(fDetectorNeutronCount < kMaxNeutrons) {
                 fDetectorNeutronEnergies[fDetectorNeutronCount] = energy;
                 fDetectorNeutronAngles[fDetectorNeutronCount] = angle;
+                fDetectorNeutronTOF     [fDetectorNeutronCount] = tof;   // Task 3
                 fDetectorNeutronCount++;
             }
         }
@@ -51,6 +58,7 @@ void DAMSAAnalysis::RecordParticle(const G4String& particleName, G4double energy
             if(fDetectorPhotonEnergyCount < kMaxPhotons) {
                 fDetectorPhotonEnergies[fDetectorPhotonEnergyCount] = energy;
                 fDetectorPhotonAngles[fDetectorPhotonEnergyCount] = angle;
+                fDetectorPhotonTOF     [fDetectorPhotonEnergyCount] = tof;
                 fDetectorPhotonEnergyCount++;
             }
         }
@@ -294,6 +302,9 @@ void DAMSAAnalysis::Reset()
     fDetectorNeutronCount = 0;
     fDetectorElectronCount = 0;
     fDetectorPositronCount = 0;
+
+    for(int i = 0; i < kMaxPhotons;  i++) fDetectorPhotonTOF[i]  = 0.;
+    for(int i = 0; i < kMaxNeutrons; i++) fDetectorNeutronTOF[i] = 0.;
 }
 
 G4int DAMSAAnalysis::GetForwardPhotons() const
@@ -306,4 +317,24 @@ G4int DAMSAAnalysis::GetForwardPhotons() const
         }
     }
     return forwardCount;
+}
+
+void DAMSAAnalysis::PrintTOFSummary() const
+{
+    const G4String csvName = "tof_data.csv";
+    std::ofstream csv(csvName);
+    csv << "particle,global_time_ns\n";
+
+    for(G4int i = 0; i < fDetectorPhotonEnergyCount; i++) {
+        csv << "photon,"
+            << std::fixed << std::setprecision(6)
+            << fDetectorPhotonTOF[i] / ns << "\n";
+    }
+    for(G4int i = 0; i < fDetectorNeutronCount; i++) {
+        csv << "neutron,"
+            << std::fixed << std::setprecision(6)
+            << fDetectorNeutronTOF[i] / ns << "\n";
+    }
+    csv.close();
+    G4cout << "TOF data written to " << csvName << G4endl;
 }

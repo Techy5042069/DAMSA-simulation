@@ -52,3 +52,10 @@ add_executable(damsa_gap_scan
     ${common_sources}
 )
 target_link_libraries(damsa_gap_scan ${Geant4_LIBRARIES})
+
+
+add_executable(damsa_tof_analysis
+    damsa_tof_analysis.cpp
+    ${common_sources}
+)
+target_link_libraries(damsa_tof_analysis ${Geant4_LIBRARIES})
