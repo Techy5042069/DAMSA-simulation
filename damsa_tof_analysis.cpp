@@ -24,10 +24,10 @@ int main()
 
     DAMSAAnalysis::Instance()->Reset();
 
-    runManager->BeamOn(1);
-    G4cout << "This is working\n";
+    runManager->BeamOn(1000);
+    std::cerr << "\n=== SIMULATION COMPLETE ===\n" << std::endl;
     DAMSAAnalysis::Instance()->PrintTOFSummary();
-    G4cout << "This is not working\n";
+    std::cerr << "\n=== DONE ===\n" << std::endl;
 
     delete runManager;
     return 0;

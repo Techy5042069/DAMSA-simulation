@@ -10,6 +10,7 @@ import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 def main():
     parser = argparse.ArgumentParser(description="Plot TOF histogram from DAMSA simulation CSV")
@@ -59,7 +60,9 @@ def main():
     ax.set_xlim(t_min, t_max)
     ax.grid(axis="y", linestyle="--", alpha=0.4)
 
-    out = "tof_histogram.png"
+    # out = "tof_histogram.png"
+    os.makedirs("build", exist_ok=True)
+    out = os.path.join("build", "tof_histogram.png")
     plt.tight_layout()
     plt.savefig(out, dpi=150)
     print(f"Saved {out}")
