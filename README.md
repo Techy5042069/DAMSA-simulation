@@ -46,4 +46,11 @@ Simulation generates VRML files for visualization showing:
 ## Detector geometry
 Particle trajectories color-coded by type (electrons: red, photons: green, positrons: cyan, neutrons: yellow)
 
-
+## DAMSA Time-of-flight analysis (TOF)
+	1. This lets us see the arrival time of particles in the scoring volume which is infront of the detector entrance.
+	2. With this information, we can do a photon/neutron discrimination. 
+	3. The damsa_tof_analysis executable generates a csv file. The first column being `particle_type` and the second being `time of arrival`
+	4. The python file generates a histogram with "time" bins.
+### Usage
+	1. Generate CSV file: ./damsa_tof_analysis
+	2. Use tof_analysis.py: py plot_tof.py ./build/tof_data.csv --bin-width 0.5
